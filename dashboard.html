@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — Top One Trader</title>
+  <link rel="icon" href="logo.png" type="image/png"/>
+  <style>
+    :root{
+      --bg:#0a0f1f; --panel:#111b33; --navy:#0d1428; --muted:#9fb0d1; --accent:#1abc9c; --danger:#e84545;
+    }
+    *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#fff}
+    header{display:flex;align-items:center;justify-content:space-between;padding:14px 22px;background:var(--navy)}
+    header img{height:40px}
+    .container{max-width:900px;margin:36px auto;padding:0 16px}
+    .panel{background:var(--panel);border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.45);padding:20px}
+    h2{margin:0 0 14px} .grid{display:grid;gap:14px;grid-template-columns:1fr; }
+    @media(min-width:800px){ .grid{grid-template-columns:1fr 1fr} }
+    .card{background:#1a2544;border-radius:12px;padding:16px}
+    .logout{background:var(--danger);padding:8px 14px;border-radius:10px;color:#fff;text-decoration:none}
+    label{display:block;font-size:14px;margin:8px 0 6px;color:var(--muted)}
+    input{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:#182447;color:#fff}
+    .btn{padding:10px 14px;border-radius:10px;border:none;cursor:pointer}
+    .save{background:var(--accent);color:#081116;font-weight:700}
+  </style>
+</head>
+<body>
+  <header>
+    <div style="display:flex;align-items:center;gap:10px">
+      <img src="logo.png" alt="Top One Trader Logo">
+      <strong>Top One Trader</strong>
+    </div>
+    <a href="index.html" class="logout" onclick="logout()">Logout</a>
+  </header>
+
+  <div class="container">
+    <div class="panel">
+      <h2 id="welcome">Welcome!</h2>
+      <p style="color:var(--muted);margin-top:-6px">This is a demo dashboard. Values below are placeholders.</p>
+    </div>
+
+    <div class="grid" style="margin-top:14px">
+      <div class="card">
+        <h3>Account Balance</h3>
+        <p>$0.00 (Demo)</p>
+      </div>
+      <div class="card">
+        <h3>Recent Activity</h3>
+        <p>No transactions yet.</p>
+      </div>
+    </div>
+
+    <!-- Profile Editor -->
+    <div class="panel" style="margin-top:14px">
+      <h2>Profile</h2>
+      <div class="grid">
+        <div class="card">
+          <label for="profName">Full Name</label>
+          <input id="profName" type="text" placeholder="Your name">
+          <label for="profEmail">Email</label>
+          <input id="profEmail" type="email" placeholder="you@example.com">
+          <div style="margin-top:12px">
+            <button class="btn save" onclick="saveProfile()">Save Changes</button>
+          </div>
+          <p id="saveMsg" style="color:var(--accent);display:none;margin-top:10px">Saved!</p>
+        </div>
+        <div class="card">
+          <h3>Security</h3>
+          <p style="color:var(--muted)">Password reset and 2FA coming soon.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Load user info from localStorage
+    const name = localStorage.getItem('username') || '';
+    const email = localStorage.getItem('useremail') || '';
+    const displayName = name && name.trim() ? name : (email || 'Trader');
+    document.getElementById('welcome').textContent = `Welcome, ${displayName}!`;
+
+    // Prefill profile form
+    document.getElementById('profName').value = name;
+    document.getElementById('profEmail').value = email;
+
+    function saveProfile(){
+      const n = document.getElementById('profName').value.trim();
+      const e = document.getElementById('profEmail').value.trim();
+      if(!e){ alert('Email is required'); return; }
+      localStorage.setItem('username', n);
+      localStorage.setItem('useremail', e);
+      document.getElementById('welcome').textContent = `Welcome, ${ (n||e) }!`;
+      document.getElementById('saveMsg').style.display='block';
+      setTimeout(()=>{ document.getElementById('saveMsg').style.display='none'; }, 1200);
+    }
+    function logout(){ localStorage.removeItem('username'); /* keep email if you prefer */ }
+  </script>
+</body>
+</html>
